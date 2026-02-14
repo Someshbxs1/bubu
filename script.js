@@ -136,3 +136,18 @@ function initMemoriesPage() {
         observer.observe(item);
     });
 }
+const yesBtn = document.getElementById("yesBtn");
+const overlay = document.getElementById("successOverlay");
+
+yesBtn.addEventListener("click", () => {
+    // Blur everything except overlay
+    document.body.classList.add("blur");
+
+    // Show overlay
+    overlay.classList.add("active");
+
+    // Redirect after 3.5 seconds
+    setTimeout(() => {
+        window.location.href = "gallery.html";
+    }, 3500);
+});
