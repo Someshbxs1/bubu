@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Precious Moments ♡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff6b9d;
+            --secondary: #ffc2d4;
+            --accent: #ff8fab;
+            --dark: #2d3436;
+            --light: #fff5f7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #fff5f7 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(255, 107, 157, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .gallery-container {
+            max-width: 1400px;
+            margin: 120px auto 50px;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--dark);
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .instruction {
+            text-align: center;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.1);
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .instruction p {
+            color: var(--dark);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .polaroid-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .polaroid {
+            background: white;
+            padding: 1rem;
+            border-radius: 5px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            animation: float 3s ease-in-out infinite;
+            position: relative;
+        }
+
+        .polaroid:nth-child(odd) {
+            transform: rotate(-2deg);
+        }
+
+        .polaroid:nth-child(even) {
+            transform: rotate(2deg);
+        }
+
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.05) translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 107, 157, 0.3);
+            z-index: 10;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .polaroid-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, var(--secondary) 0%, var(--light) 100%);
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--primary);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .polaroid-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            animation: fadeInImage 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInImage {
+            from {
+                opacity: 0;
+                transform: scale(1.1);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .polaroid-image.placeholder::before {
+            content: '♡';
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .polaroid-caption {
+            text-align: center;
+            padding: 1rem 0.5rem 0.5rem;
+            font-family: 'Brush Script MT', cursive;
+            font-size: 1.2rem;
+            color: var(--dark);
+            min-height: 60px;
+        }
+
+        .tape {
+            position: absolute;
+            width: 80px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.7);
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-5deg);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-left: 1px dashed rgba(0, 0, 0, 0.1);
+            border-right: 1px dashed rgba(0, 0, 0, 0.1);
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90vh;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            position: relative;
+            animation: zoomIn 0.3s ease-out;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 2rem;
+            color: var(--primary);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--light);
+            transition: all 0.3s;
+        }
+
+        .lightbox-close:hover {
+            transform: rotate(90deg);
+            background: var(--primary);
+            color: white;
+        }
+
+        .next-page {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .next-btn {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+            transition: all 0.3s;
+        }
+
+        .next-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            .polaroid-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="letter.html">Love Letter</a></li>
+            <li><a href="reasons.html">100 Reasons</a></li>
+            <li><a href="polaroids.html">Our Moments</a></li>
+            <li><a href="countdown.html">Countdown</a></li>
+        </ul>
+    </nav>
+
+    <div class="gallery-container">
+        <div class="header">
+            <h1>Our Precious Moments</h1>
+            <p>Every picture tells our love story ♡</p>
+        </div>
+
+        <div class="instruction">
+            <p><strong>📸 My bubu looks so cute 🥺:</strong> My beautiful bubu......</p>
+        </div>
+
+        <div class="polaroid-grid" id="polaroid-grid"></div>
+
+        <div class="next-page">
+            <a href="countdown.html" class="next-btn">See Our Countdown ♡</a>
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <span class="lightbox-close" id="lightbox-close">×</span>
+            <img id="lightbox-img" src="" alt="Polaroid">
+        </div>
+    </div>
+
+    <script>
+        const captions = [
+            "Forever my favorite",
+            "My heart is yours",
+            "Best moment ever",
+            "Missing you always",
+            "You and me ♡",
+            "Love of my life",
+            "Can't wait to see you",
+            "Thinking of you",
+            "My everything",
+            "Together soon",
+            "Worth the wait",
+            "Distance means nothing",
+            "My beautiful bubu",
+            "Always in my heart",
+            "Our love story",
+            "You complete me",
+            "Counting down the days",
+            "My soulmate",
+            "Forever yours",
+            "Until we meet again"
+        ];
+
+        const grid = document.getElementById('polaroid-grid');
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.getElementById('lightbox-close');
+        const maxPolaroids = 8;
+
+        function createPolaroid(index) {
+            const polaroid = document.createElement('div');
+            polaroid.className = 'polaroid';
+            polaroid.style.animationDelay = `${index * 0.1}s`;
+            
+            const tape = document.createElement('div');
+            tape.className = 'tape';
+            
+            const imageDiv = document.createElement('div');
+            imageDiv.className = 'polaroid-image placeholder';
+            
+            const img = new Image();
+            img.src = `${index + 1}.png`;
+            img.alt = `Memory ${index + 1}`;
+            
+            img.onload = function() {
+                imageDiv.classList.remove('placeholder');
+                imageDiv.innerHTML = '';
+                imageDiv.appendChild(img);
+            };
+            
+            img.onerror = function() {
+                // Keep placeholder if image doesn't exist
+            };
+            
+            const caption = document.createElement('div');
+            caption.className = 'polaroid-caption';
+            caption.textContent = captions[index % captions.length];
+            
+            polaroid.appendChild(tape);
+            polaroid.appendChild(imageDiv);
+            polaroid.appendChild(caption);
+            
+            polaroid.addEventListener('click', function() {
+                if (!imageDiv.classList.contains('placeholder')) {
+                    lightboxImg.src = img.src;
+                    lightbox.classList.add('active');
+                }
+            });
+            
+            grid.appendChild(polaroid);
+        }
+
+        // Create polaroids
+        for (let i = 0; i < maxPolaroids; i++) {
+            createPolaroid(i);
+        }
+
+        // Lightbox close
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+        });
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+            }
+        });
+
+        // Add confetti effect on hover
+        const polaroids = document.querySelectorAll('.polaroid');
+        polaroids.forEach(polaroid => {
+            polaroid.addEventListener('mouseenter', function() {
+                if (Math.random() > 0.7) {
+                    createConfetti(this);
+                }
+            });
+        });
+
+        function createConfetti(element) {
+            const colors = ['#ff6b9d', '#ffc2d4', '#ff8fab'];
+            const confetti = document.createElement('div');
+            confetti.style.position = 'absolute';
+            confetti.style.width = '10px';
+            confetti.style.height = '10px';
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.borderRadius = '50%';
+            confetti.style.top = '50%';
+            confetti.style.left = '50%';
+            confetti.style.pointerEvents = 'none';
+            confetti.style.zIndex = '1000';
+            
+            const tx = (Math.random() - 0.5) * 200;
+            const ty = (Math.random() - 0.5) * 200;
+            
+            confetti.style.animation = `confetti 1s ease-out forwards`;
+            
+            element.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 1000);
+        }
+
+        // Add confetti animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confetti {
+                0% {
+                    transform: translate(0, 0) scale(1);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px) scale(0);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

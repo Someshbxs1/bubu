@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Until We Meet Again ♡</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #ff6b9d;
+            --secondary: #ffc2d4;
+            --accent: #ff8fab;
+            --dark: #2d3436;
+            --light: #fff5f7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffeef8 0%, #fff5f7 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1.5rem 2rem;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(255, 107, 157, 0.1);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .countdown-container {
+            max-width: 1200px;
+            margin: 120px auto 50px;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header p {
+            font-size: 1.3rem;
+            color: var(--dark);
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .date-setter {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.2);
+            margin-bottom: 3rem;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .date-setter h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+
+        .date-input-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .date-input-group input {
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            font-size: 1rem;
+            color: var(--dark);
+            transition: all 0.3s;
+            min-width: 200px;
+        }
+
+        .date-input-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(255, 107, 157, 0.2);
+        }
+
+        .set-date-btn {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+            transition: all 0.3s;
+        }
+
+        .set-date-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.4);
+        }
+
+        .countdown-display {
+            display: none;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .countdown-display.active {
+            display: block;
+        }
+
+        .countdown-message {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--dark);
+            font-weight: 300;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            max-width: 800px;
+            margin: 0 auto 3rem;
+        }
+
+        .countdown-item {
+            background: white;
+            padding: 2rem 1rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.2);
+            transition: all 0.3s;
+            animation: popIn 0.6s ease-out backwards;
+        }
+
+        .countdown-item:nth-child(1) { animation-delay: 0.1s; }
+        .countdown-item:nth-child(2) { animation-delay: 0.2s; }
+        .countdown-item:nth-child(3) { animation-delay: 0.3s; }
+        .countdown-item:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .countdown-item:hover {
+            transform: translateY(-10px) scale(1.05);
+            box-shadow: 0 20px 40px rgba(255, 107, 157, 0.3);
+        }
+
+        .countdown-number {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.5rem;
+            animation: numberPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes numberPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .countdown-label {
+            font-size: 1.1rem;
+            color: var(--dark);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        .progress-bar-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.2);
+            margin-bottom: 3rem;
+        }
+
+        .progress-bar-container h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: var(--light);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            border-radius: 15px;
+            transition: width 1s ease-out;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .love-quotes {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.2);
+            margin-bottom: 3rem;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .quote-text {
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            line-height: 1.8;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .quote-author {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            font-size: 20px;
+            animation: particleFloat 8s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .home-btn {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.3);
+            transition: all 0.3s;
+        }
+
+        .home-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(255, 107, 157, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            .countdown-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .countdown-number {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="letter.html">Love Letter</a></li>
+            <li><a href="reasons.html">100 Reasons</a></li>
+            <li><a href="polaroids.html">Our Moments</a></li>
+            <li><a href="countdown.html">Countdown</a></li>
+        </ul>
+    </nav>
+
+    <div class="countdown-container">
+        <div class="header">
+            <h1>Counting Down to Forever</h1>
+            <p>Until the day distance becomes just a memory ♡</p>
+        </div>
+
+        <div class="date-setter" id="date-setter">
+            <h2>When Will We Meet? ✈️</h2>
+            <p style="margin-bottom: 1.5rem; color: var(--dark);">Set the date for when you hope to meet me 😊😘</p>
+            <div class="date-input-group">
+                <input type="datetime-local" id="reunion-date" />
+                <button class="set-date-btn" onclick="setCountdown()">Start Countdown ♡</button>
+            </div>
+        </div>
+
+        <div class="countdown-display" id="countdown-display">
+            <p class="countdown-message" id="countdown-message">Time until I'm in your arms 😏..</p>
+            
+            <div class="countdown-grid">
+                <div class="countdown-item">
+                    <span class="countdown-number" id="days">0</span>
+                    <span class="countdown-label">Days</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="hours">0</span>
+                    <span class="countdown-label">Hours</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="minutes">0</span>
+                    <span class="countdown-label">Minutes</span>
+                </div>
+                <div class="countdown-item">
+                    <span class="countdown-number" id="seconds">0</span>
+                    <span class="countdown-label">Seconds</span>
+                </div>
+            </div>
+
+            <div class="progress-bar-container">
+                <h3>Journey Progress</h3>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+                <p class="progress-text" id="progress-text">0% complete</p>
+            </div>
+
+            <div class="love-quotes">
+                <p class="quote-text" id="quote-text">"Distance means so little when someone means so much."</p>
+                <p class="quote-author">- Unknown</p>
+            </div>
+
+            <a href="index.html" class="home-btn">Back to Home ♡</a>
+        </div>
+    </div>
+
+    <script>
+        const quotes = [
+            { text: "Distance means so little when someone means so much.", author: "Unknown" },
+            { text: "I carry your heart with me (I carry it in my heart).", author: "E.E. Cummings" },
+            { text: "True love doesn't mean being inseparable; it means being separated and nothing changes.", author: "Unknown" },
+            { text: "The pain of parting is nothing to the joy of meeting again.", author: "Charles Dickens" },
+            { text: "Love knows not distance; it hath no continent; its eyes are for the stars.", author: "Gilbert Parker" },
+            { text: "If you listen to the wind very carefully, you'll be able to hear me whisper my love for you.", author: "Andrew Davidson" },
+            { text: "Absence sharpens love, presence strengthens it.", author: "Thomas Fuller" },
+            { text: "bububububububububububububububububu.", author: "your bubu" }
+        ];
+
+        let countdownInterval;
+        let targetDate;
+        let startDate;
+
+        function setCountdown() {
+            const dateInput = document.getElementById('reunion-date');
+            const selectedDate = new Date(dateInput.value);
+            
+            if (!dateInput.value || selectedDate <= new Date()) {
+                alert('Please select a future date! ♡');
+                return;
+            }
+
+            targetDate = selectedDate;
+            startDate = new Date();
+            
+            localStorage.setItem('reunionDate', dateInput.value);
+            localStorage.setItem('startDate', startDate.toISOString());
+            
+            document.getElementById('date-setter').style.display = 'none';
+            document.getElementById('countdown-display').classList.add('active');
+            
+            updateCountdown();
+            countdownInterval = setInterval(updateCountdown, 1000);
+            
+            // Change quote every 10 seconds
+            setInterval(changeQuote, 10000);
+        }
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = targetDate - now;
+            
+            if (diff <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById('countdown-message').innerHTML = "🎉 The wait is over! We're together! 🎉";
+                document.getElementById('days').textContent = '0';
+                document.getElementById('hours').textContent = '0';
+                document.getElementById('minutes').textContent = '0';
+                document.getElementById('seconds').textContent = '0';
+                createCelebration();
+                return;
+            }
+            
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+            
+            // Update progress
+            const totalDuration = targetDate - startDate;
+            const elapsed = now - startDate;
+            const progress = (elapsed / totalDuration) * 100;
+            
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('progress-text').textContent = progress.toFixed(1) + '% complete';
+        }
+
+        function changeQuote() {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            const quoteText = document.getElementById('quote-text');
+            const quoteAuthor = document.querySelector('.quote-author');
+            
+            quoteText.style.animation = 'none';
+            setTimeout(() => {
+                quoteText.textContent = `"${randomQuote.text}"`;
+                quoteAuthor.textContent = `- ${randomQuote.author}`;
+                quoteText.style.animation = 'fadeIn 1s ease-out';
+            }, 10);
+        }
+
+        function createCelebration() {
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.textContent = '♥';
+                    heart.style.position = 'fixed';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.top = '100vh';
+                    heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                    heart.style.color = '#ff6b9d';
+                    heart.style.pointerEvents = 'none';
+                    heart.style.zIndex = '9999';
+                    heart.style.animation = 'riseUp 3s ease-out forwards';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 3000);
+                }, i * 100);
+            }
+            
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes riseUp {
+                    0% {
+                        transform: translateY(0) rotate(0deg);
+                        opacity: 1;
+                    }
+                    100% {
+                        transform: translateY(-100vh) rotate(360deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Load saved date
+        window.addEventListener('load', () => {
+            const savedDate = localStorage.getItem('reunionDate');
+            const savedStartDate = localStorage.getItem('startDate');
+            
+            if (savedDate) {
+                targetDate = new Date(savedDate);
+                startDate = savedStartDate ? new Date(savedStartDate) : new Date();
+                
+                if (targetDate > new Date()) {
+                    document.getElementById('date-setter').style.display = 'none';
+                    document.getElementById('countdown-display').classList.add('active');
+                    updateCountdown();
+                    countdownInterval = setInterval(updateCountdown, 1000);
+                    setInterval(changeQuote, 10000);
+                }
+            }
+        });
+
+        // Create floating 
